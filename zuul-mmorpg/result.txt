@@ -1,0 +1,21 @@
+
+Welcome to the World of Zuul!
+World of Zuul is a new, incredibly boring adventure game.
+Type 'help' if you need help.
+
+You are outside the main entrance of the university.
+Exits: east south west
+> I don't know what you mean...
+> You are in a lecture theater.
+Exits: west
+> You are outside the main entrance of the university.
+Exits: east south west
+> You are in a computing lab.
+Exits: east north
+> You are outside the main entrance of the university.
+Exits: east south west
+> You are in the campus pub.
+Exits: east
+> You are outside the main entrance of the university.
+Exits: east south west
+> Thank you for playing.  Good bye.
