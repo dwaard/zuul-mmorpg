@@ -1,6 +1,8 @@
 package nl.hz.ict.p2.zuul;
-import java.util.Set;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Class Room - a room in an adventure game.
@@ -20,6 +22,8 @@ public class Room
 {
     private String description;
     private HashMap<String, Room> exits;        // stores exits of this room.
+    
+    private List<GameObject> objects;
 
     /**
      * Create a room described "description". Initially, it has
@@ -31,9 +35,26 @@ public class Room
     {
         this.description = description;
         exits = new HashMap<String, Room>();
+        objects = new ArrayList<GameObject>();
     }
+    
+    public void addObject(GameObject e) {
+		objects.add(e);
+		fireRoomEvent(e, e.getName() + " entered the room.");
+	}
 
-    /**
+	public void removeObject(GameObject o) {
+		objects.remove(o);
+		fireRoomEvent(o, o.getName() + " left the room.");
+	}
+
+	private void fireRoomEvent(GameObject origin, String event) {
+		for (GameObject o : objects)
+			if (!o.equals(origin))
+				o.handleRoomEvent(event);
+	}
+
+	/**
      * Define an exit from this room.
      * @param direction The direction of the exit.
      * @param neighbor  The room to which the exit leads.
@@ -87,6 +108,10 @@ public class Room
     public Room getExit(String direction) 
     {
         return exits.get(direction);
+    }
+    
+    public String[] getExits() {
+    	return exits.keySet().toArray(new String[exits.size()]);
     }
 }
 

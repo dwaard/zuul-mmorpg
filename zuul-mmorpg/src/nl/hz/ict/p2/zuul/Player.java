@@ -13,14 +13,9 @@ import java.io.PrintStream;
  * @version 2011.08.08
  */
 
-public class Player {
-	
-	private String name;
-	
-	private Game world;
+public class Player extends GameObject {
 	
     private Parser parser;
-    private Room currentRoom;
     
     private PrintStream out;
     
@@ -29,8 +24,7 @@ public class Player {
      */
     public Player(String name, Game game, InputStream externalInputStream, OutputStream externalOutputStream) 
     {
-    	this.name = name;
-    	this.world = game;
+    	super(name, game);
         out = new PrintStream(externalOutputStream);
         parser = new Parser(externalInputStream);
     }
@@ -40,7 +34,7 @@ public class Player {
      */
     public void play() 
     {            
-        currentRoom = world.getSpawnArea();
+        this.setCurrentRoom(getWorld().getSpawnArea());
         printWelcome();
 
         // Enter the main command loop.  Here we repeatedly read commands and
@@ -65,7 +59,7 @@ public class Player {
         out.println("World of Zuul is a new, incredibly boring adventure game.");
         out.println("Type 'help' if you need help.");
         out.println();
-        out.println(currentRoom.getLongDescription()); // Het printen verplaatst vanuit de Room klasse. 
+        out.println(getCurrentRoom().getLongDescription()); // Het printen verplaatst vanuit de Room klasse. 
     }
 
 	/**
@@ -125,7 +119,7 @@ public class Player {
         }
 
         String direction = command.getSecondWord();
-
+        Room currentRoom = getCurrentRoom();
         // Try to leave current room.
         Room nextRoom = currentRoom.getExit(direction);
 
@@ -133,12 +127,12 @@ public class Player {
             out.println("There is no door!");
         }
         else {
-            currentRoom = nextRoom;
-            out.println(currentRoom.getLongDescription());
+            setCurrentRoom(nextRoom);
+            out.println(getCurrentRoom().getLongDescription());
         }
     }
 
-    /** 
+   /** 
      * "Quit" was entered. Check the rest of the command to see
      * whether we really quit the game.
      * @return true, if this command quits the game, false otherwise.
@@ -153,6 +147,11 @@ public class Player {
             return true;  // signal that we want to quit
         }
     }
+
+	@Override
+	public void handleRoomEvent(String event) {
+		out.println(event);
+	}
 
 
 }

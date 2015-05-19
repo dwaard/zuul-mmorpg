@@ -78,6 +78,9 @@ public class Game
     		name = args[0];
     	try {
 			Game g = new Game();
+			for (int n=1; n<=25; n++) {
+				Zombie z = new Zombie("Zombie" + n, g);
+			}
 			Player p = new Player(name, g, System.in, System.out);
 			p.play();
 		} catch (Exception e) {
