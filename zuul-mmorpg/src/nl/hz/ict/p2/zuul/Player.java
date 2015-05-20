@@ -2,6 +2,7 @@ package nl.hz.ict.p2.zuul;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -27,6 +28,27 @@ public class Player extends GameObject {
     	super(name, game);
         out = new PrintStream(externalOutputStream);
         parser = new Parser(externalInputStream);
+        PlayerThread thread = new PlayerThread();
+        thread.start();
+    }
+    
+    /**
+     * 
+     */
+    private class PlayerThread extends Thread {
+    	
+    	public PlayerThread() {
+    		super();
+    		this.setDaemon(true);
+    	}
+    	
+    	@Override
+    	public void run() {
+    		System.out.println("Player " + name + " joined the game.");
+			play();
+			System.out.println("Player " + name + " left the game.");
+    	}
+    	
     }
 
     /**
@@ -42,11 +64,18 @@ public class Player extends GameObject {
                 
         boolean finished = false;
         while (! finished) {
-            out.print("> ");     // print prompt, verplaatst van de parser naar hier
-            Command command = parser.getCommand();
-            finished = processCommand(command);
+            out.print("> ");     // print prompt, verplaatst van de parser naar hier 
+            
+            try {
+	            Command command = parser.getCommand();
+	            finished = processCommand(command);
+            }
+            catch(NoSuchElementException e) {
+            	System.out.println("Player " + name + " lost connection");
+            	finished = true;
+            }
         }
-        out.println("Thank you for playing.  Good bye.");
+        out.println("Thank you for playing. Good bye.");
     }
 
     /**
