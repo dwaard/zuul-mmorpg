@@ -24,18 +24,17 @@ public class Server {
 		ServerSocket serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(portNumber);
+			System.out.println("Server started succesfully, waiting for players to connect...");
+			
 			while (true) {
-				System.out.println("Waiting for connection...");
 				Socket clientSocket = serverSocket.accept();
 				System.out.println("Connection accepted");
+				
 				String name = clientSocket.getRemoteSocketAddress().toString();
-				Player player = new Player(name, game,
+				new Player(name, game,
 						clientSocket.getInputStream(),
 						clientSocket.getOutputStream());
-				System.out.println("Player " + name + " joined the game.");
-				player.play();
-				System.out.println("Player " + name + " left the game.");
-				clientSocket.close();
+
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
