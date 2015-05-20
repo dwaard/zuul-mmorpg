@@ -39,13 +39,19 @@ public class Room
     }
     
     public void addObject(GameObject e) {
-		objects.add(e);
-		fireRoomEvent(e, e.getName() + " entered the room.");
+    	synchronized (objects) {
+    		objects.add(e);
+    		
+    		fireRoomEvent(e, e.getName() + " entered the room.");
+    	}
 	}
 
 	public void removeObject(GameObject o) {
-		objects.remove(o);
-		fireRoomEvent(o, o.getName() + " left the room.");
+		synchronized (objects) {
+			objects.remove(o);
+			
+			fireRoomEvent(o, o.getName() + " left the room.");
+		}
 	}
 
 	private void fireRoomEvent(GameObject origin, String event) {
