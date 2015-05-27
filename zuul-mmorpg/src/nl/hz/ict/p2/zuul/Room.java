@@ -38,12 +38,12 @@ public class Room
         objects = new ArrayList<GameObject>();
     }
     
-    public void addObject(GameObject e) {
+    public synchronized void addObject(GameObject e) {
 		objects.add(e);
 		fireRoomEvent(e, e.getName() + " entered the room.");
 	}
 
-	public void removeObject(GameObject o) {
+	public synchronized void removeObject(GameObject o) {
 		objects.remove(o);
 		fireRoomEvent(o, o.getName() + " left the room.");
 	}
